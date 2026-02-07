@@ -1,0 +1,34 @@
+{
+  "name": "@oalacea/daemon",
+  "version": "0.5.0",
+  "description": "AI-powered automated test generation and remediation for web applications",
+  "author": "Yanis",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pamacea/daemon"
+  },
+  "bin": {
+    "daemon": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Run: npx --yes @oalacea/daemon@latest\" && exit 0"
+  },
+  "keywords": [
+    "testing",
+    "automation",
+    "ai",
+    "e2e",
+    "unit-tests",
+    "integration-tests",
+    "performance",
+    "vitest",
+    "playwright",
+    "k6"
+  ],
+  "dependencies": {},
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

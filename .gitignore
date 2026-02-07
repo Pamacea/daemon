@@ -1,0 +1,15 @@
+.DS_Store
+*.log
+*.tgz
+.env
+.env.local
+.env.*.local
+node_modules/
+dist/
+build/
+.next/
+.nuxt/
+coverage/
+.nyc_output/
+*.tgz
+.DS_Store
