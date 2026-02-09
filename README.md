@@ -1,5 +1,11 @@
 # Daemon
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub release](https://img.shields.io/github/v/release/Pamacea/daemon)](https://github.com/Pamacea/daemon/releases/latest)
+[![CI](https://github.com/Pamacea/daemon/actions/workflows/ci.yml/badge.svg)](https://github.com/Pamacea/daemon/actions)
+
+
+
 AI-powered automated test generation and remediation for web applications.
 
 ## Quick Start
