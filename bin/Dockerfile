@@ -62,7 +62,8 @@ RUN npm install -g \
 
 # Create non-root user for security
 # Use UID 1001 to avoid conflict with existing node user (UID 1000)
-RUN useradd -m -u 1001 -s /bin/bash daemon && \
+# Check if 'daemon' user exists first (node:20-slim already has it)
+RUN id -u daemon >/dev/null 2>&1 || useradd -m -u 1001 -s /bin/bash daemon && \
     mkdir -p /app && \
     chown -R daemon:daemon /app
 
