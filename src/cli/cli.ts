@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * Daemon CLI - Main CLI Class
  *
