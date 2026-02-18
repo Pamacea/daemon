@@ -1,15 +1,37 @@
-.DS_Store
-*.log
-*.tgz
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Environment
 .env
 .env.local
 .env.*.local
-node_modules/
-dist/
-build/
-.next/
-.nuxt/
-coverage/
-.nyc_output/
-*.tgz
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
 .DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary
+.tmp/
+tmp/

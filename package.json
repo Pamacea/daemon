@@ -1,6 +1,6 @@
 {
   "name": "@oalacea/daemon",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "AI-powered automated test generation and remediation for web applications",
   "author": "Yanis",
   "license": "MIT",
@@ -8,11 +8,19 @@
     "type": "git",
     "url": "https://github.com/Pamacea/daemon"
   },
+  "type": "module",
   "bin": {
-    "daemon": "./bin/cli.js"
+    "daemon": "./dist/cli/index.js"
   },
   "scripts": {
-    "test": "echo \"Run: npx --yes @oalacea/daemon@latest\" && exit 0"
+    "build": "tsc",
+    "dev": "tsx src/cli/index.ts",
+    "test": "vitest",
+    "test:run": "node --experimental-strip-types dist/cli/index.js",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build"
   },
   "keywords": [
     "testing",
@@ -26,9 +34,20 @@
     "playwright",
     "k6"
   ],
-  "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.19.33",
+    "eslint": "^8.56.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.9.3",
+    "vitest": "^1.2.0"
+  },
   "engines": {
     "node": ">=18.0.0"
-  }
+  },
+  "files": [
+    "dist",
+    "prompts",
+    "templates",
+    "bin/Dockerfile"
+  ]
 }
