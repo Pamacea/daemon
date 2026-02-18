@@ -1,6 +1,6 @@
 {
   "name": "@oalacea/daemon",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "AI-powered automated test generation and remediation for web applications",
   "author": "Yanis",
   "license": "MIT",
@@ -10,7 +10,7 @@
   },
   "type": "module",
   "bin": {
-    "daemon": "./dist/cli/index.js"
+    "daemon": "./dist/cli/cli.js"
   },
   "scripts": {
     "build": "tsc",
@@ -19,7 +19,7 @@
     "test:run": "node --experimental-strip-types dist/cli/index.js",
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf dist",
+    "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
     "prepublishOnly": "npm run clean && npm run build"
   },
   "keywords": [
