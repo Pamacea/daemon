@@ -44,8 +44,39 @@ export class DaemonCli {
   async run(argv: string[]): Promise<void> {
     const args = argv.slice(2); // Skip node and script path
 
-    if (args.length === 0 || args[0] === '--help' || args[0] === '-h') {
+    if (args.length === 0) {
+      // No command provided - check if daemon is already initialized
+      const fs = await import('node:fs');
+      const path = await import('node:path');
+      const configExists = fs.existsSync(path.join(process.cwd(), 'daemon.config.json'));
+
+      if (!configExists) {
+        // Auto-run init for first-time users
+        logger.info('Welcome to Daemon! Initializing your project...');
+        logger.info('');
+        const initCommand = this.commands.get('init');
+        if (initCommand) {
+          try {
+            await initCommand.execute([]);
+          } catch (error) {
+            logger.error('Initialization failed', error);
+            process.exit(1);
+          }
+        }
+      } else {
+        // Already initialized, show help
+        this.showHelp();
+      }
+      return;
+    }
+
+    if (args[0] === '--help' || args[0] === '-h') {
       this.showHelp();
+      return;
+    }
+
+    if (args[0] === '--version') {
+      console.log('v0.6.3');
       return;
     }
 
@@ -73,13 +104,13 @@ export class DaemonCli {
    */
   private showHelp(): void {
     console.log(`
-Daemon v0.6.2 - AI-powered automated testing toolkit
+Daemon v0.6.3 - AI-powered automated testing toolkit
 
 USAGE:
   daemon <command> [options]
 
 COMMANDS:
-  init        Initialize project with Daemon
+  init        Initialize project with Daemon (creates EXECUTE.md + Dockerfile.daemon)
   detect      Detect project framework and tools
   test        Generate and run tests
 
@@ -91,6 +122,12 @@ EXAMPLES:
   daemon init
   daemon detect
   daemon test --coverage
+
+GETTING STARTED:
+  1. Run "daemon init" to initialize your project
+  2. Check EXECUTE.md for AI testing instructions
+  3. Build Docker: docker build -t daemon-tools -f Dockerfile.daemon .
+  4. Start container: docker run -d --name daemon-tools -v %cd:/app daemon-tools
 
 For more information, visit: https://github.com/Pamacea/daemon
     `);
