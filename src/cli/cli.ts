@@ -76,7 +76,7 @@ export class DaemonCli {
     }
 
     if (args[0] === '--version') {
-      console.log('v0.6.3');
+      console.log('v0.6.4');
       return;
     }
 
@@ -104,7 +104,7 @@ export class DaemonCli {
    */
   private showHelp(): void {
     console.log(`
-Daemon v0.6.3 - AI-powered automated testing toolkit
+Daemon v0.6.4 - AI-powered automated testing toolkit
 
 USAGE:
   daemon <command> [options]

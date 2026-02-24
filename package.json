@@ -1,6 +1,6 @@
 {
   "name": "@oalacea/daemon",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "AI-powered automated test generation and remediation for web applications",
   "author": "Yanis",
   "license": "MIT",
