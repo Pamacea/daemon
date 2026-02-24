@@ -73,7 +73,7 @@ export class DaemonCli {
    */
   private showHelp(): void {
     console.log(`
-Daemon v0.6.0 - AI-powered automated testing toolkit
+Daemon v0.6.2 - AI-powered automated testing toolkit
 
 USAGE:
   daemon <command> [options]

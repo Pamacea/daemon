@@ -1,6 +1,6 @@
 {
   "name": "@oalacea/daemon",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "AI-powered automated test generation and remediation for web applications",
   "author": "Yanis",
   "license": "MIT",
@@ -10,7 +10,7 @@
   },
   "type": "module",
   "bin": {
-    "daemon": "./dist/cli/cli.js"
+    "daemon": "./dist/cli/index.js"
   },
   "scripts": {
     "build": "tsc",

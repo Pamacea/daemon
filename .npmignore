@@ -1,0 +1,47 @@
+# Sources
+src/
+*.ts
+!dist/**/*.js
+!dist/**/*.d.ts
+!dist/**/*.map
+
+# Development
+.env
+.env.*
+!.env.example
+*.log
+*.local
+
+# Testing
+coverage/
+.nyc_output/
+*.test.ts
+*.spec.ts
+__tests__/
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+
+# Build artifacts (keep dist for npm package)
+# dist/ is included in published package via files field in package.json
