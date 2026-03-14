@@ -7,7 +7,7 @@
 
 > AI-powered automated test generation and code review for web applications.
 
-**v0.7.0** — Rust support, NestJS analysis, Scoring system, and more!
+**v0.8.0** — daemon-rust crate, SEO scoring, 6-dimension quality analysis!
 
 ## Quick Start
 
@@ -23,15 +23,17 @@ First run installs the testing toolkit (~500 MB Docker image, takes 2-3 minutes)
 - **Docker** - [Install](https://docs.docker.com/get-docker/)
 - **AI coding agent** - Claude Code, Cursor, Windsurf, Aider, Codex...
 
-## New in v0.7.0
+## New in v0.8.0
 
 | Feature | Description |
 |---------|-------------|
-| 🦀 **Rust Support** | Axum, Actix-web, Rocket frameworks with dedicated templates |
+| 🦀 **daemon-rust Crate** | Dedicated Rust crate for native Rust project support |
+| 🌐 **SEO Scoring** | 6th dimension: meta tags, Open Graph, structured data analysis |
+| 📊 **Enhanced Scoring** | 6-dimension code quality scoring (coverage, quality, performance, security, SEO, docs) |
 | 🎯 **NestJS Analysis** | Pattern validation, DI checks, decorator verification |
-| 📊 **Scoring System** | 5-dimension code quality scoring (coverage, quality, performance, security, docs) |
 | 🔍 **Code Review** | Static analysis, security scanning, dependency analysis |
 | 🛠️ **Extended Toolkit** | Rust toolchain, Lighthouse, security tools, accessibility tools |
+| 📚 **Rust Feasibility Docs** | Playwright and ESLint/TS API Rust equivalents roadmap |
 
 ## Features
 
@@ -45,7 +47,8 @@ First run installs the testing toolkit (~500 MB Docker image, takes 2-3 minutes)
 | **Code Quality** | ESLint, TypeScript, complexity analysis |
 | **Security** | Snyk, npm audit, dependency vulnerabilities |
 | **Accessibility** | Pa11y, axe-core CI integration |
-| **Rust Support** | Axum, Actix, Rocket templates and tests |
+| **SEO Analysis** | Meta tags, Open Graph, structured data, Core Web Vitals |
+| **Rust Support** | daemon-rust crate, Axum, Actix, Rocket templates and tests |
 | **NestJS Support** | Controllers, services, guards, pipes, interceptors |
 
 ## How It Works
@@ -59,7 +62,7 @@ First run installs the testing toolkit (~500 MB Docker image, takes 2-3 minutes)
 │              ↓                                               │
 │  2. ANALYZE   Static analysis, security scan, dependencies   │
 │              ↓                                               │
-│  3. SCORE     5-dimension quality scoring                    │
+│  3. SCORE     6-dimension quality scoring                    │
 │              ↓                                               │
 │  4. GENERATE  Framework-specific test templates              │
 │              ↓                                               │
@@ -155,7 +158,7 @@ The Docker container includes 50+ tools:
 
 ```
 ╔═══════════════════════════════════════════════════════════╗
-║                    DAEMON REPORT v0.7.0                   ║
+║                    DAEMON REPORT v0.8.0                   ║
 ╠═══════════════════════════════════════════════════════════╣
 ║                                                             ║
 ║  Framework: Next.js 14                                      ║
@@ -170,6 +173,7 @@ The Docker container includes 50+ tools:
 ║  │  Quality     ██████████████░░░░ 78/100            │   ║
 ║  │  Performance ████████████████░░ 88/100            │   ║
 ║  │  Security    ████████████░░░░░░ 75/100            │   ║
+║  │  SEO         ████████████████░░ 82/100            │   ║
 ║  │  Docs        ██████████░░░░░░░░ 70/100            │   ║
 ║  └─────────────────────────────────────────────────────┘   ║
 ║                                                             ║
@@ -212,21 +216,23 @@ Create `daemon.config.js` in your project root:
 export default {
   scoring: {
     weights: {
-      coverage: 0.30,
-      quality: 0.25,
+      coverage: 0.25,
+      quality: 0.20,
       performance: 0.20,
       security: 0.15,
+      seo: 0.10,
       documentation: 0.10,
     },
     thresholds: {
       coverage: { excellent: 80, good: 60 },
       performance: { lighthouse: 85 },
+      seo: { excellent: 80, good: 60 },
     },
   },
 
   review: {
-    analyzers: ['static', 'security', 'dependencies', 'nestjs', 'rust'],
-    exclude: ['node_modules/**', 'dist/**'],
+    analyzers: ['static', 'security', 'dependencies', 'nestjs', 'rust', 'seo'],
+    exclude: ['node_modules/**', 'dist/**', 'target/**'],
     autoFix: { enabled: false },
   },
 
@@ -238,12 +244,20 @@ export default {
   },
 
   rust: {
-    framework: 'axum', // or 'actix', 'rocket'
+    framework: 'axum', // or 'actix', 'rocket', 'poem'
     testRunner: 'cargo-nextest',
+    useDaemonRust: true, // Use daemon-rust crate
+  },
+
+  seo: {
+    checkMetaTags: true,
+    checkOpenGraph: true,
+    checkStructuredData: true,
+    checkLighthouse: true,
   },
 
   docker: {
-    image: 'daemon-tools:0.7.0',
+    image: 'daemon-tools:0.8.0',
     keepRunning: false,
   },
 };
@@ -254,7 +268,10 @@ export default {
 - [**Scoring System**](docs/scoring.md) - How code quality is measured
 - [**Code Review**](docs/review.md) - Review workflow and options
 - [**Rust Support**](docs/rust-support.md) - Rust frameworks and templates
+- [**daemon-rust Crate**](crates/daemon-rust/README.md) - Native Rust testing crate
 - [**NestJS Support**](docs/nestjs-support.md) - NestJS patterns and best practices
+- [**Playwright Rust Feasibility**](docs/PLAYWRIGHT_RUST_FEASIBILITY.md) - Playwright Rust equivalent roadmap
+- [**ESLint/TS Rust Feasibility**](docs/ESLINT_TYPESCRIPT_RUST_FEASIBILITY.md) - ESLint/TS API Rust translation layer
 - [**Templates**](templates/README.md) - Available test templates
 - [**Docker**](bin/README.md) - Container tools and usage
 

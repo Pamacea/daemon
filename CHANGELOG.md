@@ -7,6 +7,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-03-14
+
+### Added
+
+#### 🦀 daemon-rust Crate
+- **Native Rust crate** (`daemon-rust`) for Rust project testing and analysis
+- `DaemonRust` trait with analyze, generate_tests, and run_tests methods
+- Framework detection: Axum, Actix, Rocket, Poem
+- Test templates: unit, integration, framework-specific patterns
+- Configuration management for Rust projects
+- Cargo workspace integration in main package
+
+#### 📚 Rust Feasibility Documentation
+- **Playwright Rust Feasibility** (`docs/PLAYWRIGHT_RUST_FEASIBILITY.md`)
+  - Analysis of Rust browser automation options
+  - headless-chrome vs WebDriver comparison
+  - 3-phase implementation roadmap (1-7 weeks)
+  - Hybrid architecture proposal (Rust + Node.js microservice)
+
+- **ESLint/TypeScript Rust Feasibility** (`docs/ESLINT_TYPESCRIPT_RUST_FEASIBILITY.md`)
+  - Analysis of swc for JS/TS parsing in Rust
+  - Hybrid bridge architecture for ESLint/TS API
+  - Native rule migration strategy
+  - Complete implementation roadmap
+
+#### 🌐 Enhanced SEO Scoring
+- **SEO elevated to 6th dimension** in scoring system (from 9 to 6 refined dimensions)
+- Meta tags validation (title, description, keywords)
+- Open Graph and Twitter Cards analysis
+- Structured data (JSON-LD) validation
+- Heading structure analysis (H1-H6)
+- Sitemap.xml and robots.txt detection
+- Social media sharing readiness score
+
+### Changed
+- Scoring dimensions refined: 6 core dimensions (coverage, quality, performance, security, seo, docs)
+- Updated README to reflect v0.8.0 features
+- Enhanced framework support documentation
+
+### Technical Details
+- **Rust Stack**: tokio, reqwest, serde, walkdir, glob, regex, tracing
+- **Package structure**: crates/ directory with workspace configuration
+- **Documentation**: Comprehensive feasibility studies for future Rust expansion
+
 ## [0.7.5] - 2026-03-14
 
 ### Added
@@ -167,7 +211,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cross-platform support (Linux, macOS, Windows)
 - MIT License
 
-[Unreleased]: https://github.com/Pamacea/daemon/compare/v0.6.1...HEAD
+[Unreleased]: https://github.com/Pamacea/daemon/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/Pamacea/daemon/compare/v0.7.5...v0.8.0
+[0.7.5]: https://github.com/Pamacea/daemon/compare/v0.7.4...v0.7.5
+[0.7.4]: https://github.com/Pamacea/daemon/compare/v0.7.3...v0.7.4
+[0.7.3]: https://github.com/Pamacea/daemon/compare/v0.7.2...v0.7.3
+[0.7.2]: https://github.com/Pamacea/daemon/compare/v0.7.1...v0.7.2
+[0.7.1]: https://github.com/Pamacea/daemon/compare/v0.7.0...v0.7.1
+[0.7.0]: https://github.com/Pamacea/daemon/compare/v0.6.1...v0.7.0
 [0.6.1]: https://github.com/Pamacea/daemon/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/Pamacea/daemon/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/Pamacea/daemon/compare/v0.5.0...v0.5.1
