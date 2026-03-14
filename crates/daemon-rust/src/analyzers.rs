@@ -37,7 +37,7 @@ impl RustAnalyzer {
         for entry in walkdir::WalkDir::new(path.join("src"))
             .into_iter()
             .filter_map(|e| e.ok())
-            .filter(|e| e.path().extension() == "rs")
+            .filter(|e| e.path().extension() == Some(std::ffi::OsStr::new("rs")))
         {
             let content = std::fs::read_to_string(entry.path())?;
             count += content.lines().count();
@@ -64,14 +64,14 @@ impl RustAnalyzer {
         let cargo_toml = path.join("Cargo.toml");
         let content = std::fs::read_to_string(&cargo_toml)?;
 
-        // Parse dependencies with regex
-        let dep_regex = Regex::new(r#"^\s+([\w-]+)\s*=")?#)?;
+        // Parse dependencies with regex - matches "name = "version"" or "name = { ... }"
+        let dep_regex = Regex::new(r#"^[\s]*(\w[\w-]*)\s*="#)?;
         let mut deps = Vec::new();
 
         for line in content.lines() {
-            if let Some(cap) = dep_regex.captures(line.as_ref()) {
+            if let Some(cap) = dep_regex.captures(line) {
                 if let Some(dep_name) = cap.get(1) {
-                    deps.push(dep_name.to_string());
+                    deps.push(dep_name.as_str().to_string());
                 }
             }
         }
@@ -149,7 +149,7 @@ impl QualityAnalyzer {
         for entry in walkdir::WalkDir::new(dir)
             .into_iter()
             .filter_map(|e| e.ok())
-            .filter(|e| e.path().extension() == "rs")
+            .filter(|e| e.path().extension() == Some(std::ffi::OsStr::new("rs")))
         {
             let content = std::fs::read_to_string(entry.path())?;
             count += re.find_iter(&content).count();

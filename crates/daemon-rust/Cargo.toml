@@ -2,19 +2,32 @@
 name = "daemon-rust"
 version = "0.1.0"
 edition = "2021"
-description = "Rust support for Daemon - AI-powered testing and code quality toolkit"
-authors = ["Yanis"]
-license = "MIT"
+rust-version = "1.75"
+
+description = "AI-powered testing and code quality toolkit for Rust projects"
+documentation = "https://github.com/Pamacea/daemon/blob/main/crates/daemon-rust/README.md"
 repository = "https://github.com/Pamacea/daemon"
-keywords = ["testing", "rust", "cargo", "nextest", "code-quality"]
+readme = "README.md"
+license = "MIT"
+keywords = ["testing", "quality", "cargo", "axum", "actix"]
 categories = [
     "development-tools::testing",
     "development-tools::cargo-plugins",
 ]
+exclude = [".github/", "docs/"]
+
+[metadata.docs.rs]
+all-features = true
+rustc-args = ["--cfg", "docsrs"]
+
+[features]
+default = ["tokio", "nextest"]
+tokio = ["dep:tokio"]
+nextest = []
 
 [dependencies]
 # Async runtime
-tokio = { version = "1.40", features = ["full"] }
+tokio = { version = "1.40", features = ["full"], optional = true }
 # HTTP client
 reqwest = { version = "0.12", features = ["json"] }
 serde = { version = "1.0", features = ["derive"] }
@@ -40,5 +53,9 @@ tokio-test = "0.4"
 mockito = "0.4"
 
 [[bin]]
-name = "daemon"
+name = "daemon-rust"
 path = "src/main.rs"
+
+[lib]
+name = "daemon_rust"
+path = "src/lib.rs"

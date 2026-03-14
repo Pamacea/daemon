@@ -2,7 +2,7 @@
 //!
 //! Provides command-line interface for Rust project analysis
 
-use crate::{Config, DaemonRust, Result};
+use crate::{Config, Result};
 use anyhow::Context;
 use console::Style;
 use std::path::Path;
@@ -37,8 +37,8 @@ impl DaemonCli {
         let cyan = Style::new().cyan();
         let green = Style::new().green();
 
-        println!("{}", cyan.apply("  → Framework detected: "));
-        println!("{}", green.apply(format!("{:?}", framework)));
+        println!("{}", cyan.apply_to("  → Framework detected: "));
+        println!("{}", green.apply_to(format!("{:?}", framework)));
 
         // Create .daemon directory
         let daemon_dir = path.join(".daemon");
@@ -49,7 +49,7 @@ impl DaemonCli {
         let execute_md = self.generate_execute_prompt(framework)?;
         std::fs::write(daemon_dir.join("EXECUTE.md"), execute_md)?;
 
-        println!("{}", green.apply("  ✓ Daemon initialized for Rust!"));
+        println!("{}", green.apply_to("  ✓ Daemon initialized for Rust!"));
 
         Ok(())
     }
@@ -88,7 +88,7 @@ This guide helps you test your Rust application with Daemon.
 
 ## Framework-Specific Testing
 
-### {:?} Templates
+### Framework-Specific Templates
 
 ```rust
 // Unit test example

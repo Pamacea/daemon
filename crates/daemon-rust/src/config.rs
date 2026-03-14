@@ -1,6 +1,7 @@
 //! Configuration management for daemon-rust
 
 use crate::Result;
+use anyhow::Context;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
@@ -15,6 +16,7 @@ pub struct Config {
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub enum TestRunnerChoice {
+    #[default]
     #[serde(rename = "auto")]
     Auto,
     #[serde(rename = "cargo")]
@@ -46,7 +48,7 @@ impl Config {
             .context("Failed to create .daemon directory")?;
 
         let config_path = daemon_dir.join("config.json");
-        let json = serde_json::to_string_pretty(self, Default::default())
+        let json = serde_json::to_string_pretty(self)
             .context("Failed to serialize config")?;
 
         std::fs::write(&config_path, json)
