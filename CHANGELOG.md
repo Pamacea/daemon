@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.5] - 2026-03-14
+
+### Added
+- Pre-built Docker image support for instant initialization (1-2 min instead of 20+ min)
+- Auto-detection: tries pre-built image first, falls back to local build
+- Optimized Dockerfile with cargo-binstall for faster Rust tools installation
+
+### Changed
+- Build timeout optimized for pre-built image scenario
+
 ## [0.7.4] - 2026-03-14
 
 ### Fixed

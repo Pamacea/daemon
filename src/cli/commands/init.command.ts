@@ -21,10 +21,14 @@ const __dirname = path.dirname(__filename);
 
 // Configuration
 const CONFIG = {
-  IMAGE: 'daemon-tools',
+  // Try pre-built image first, fall back to local build
+  PREBUILT_IMAGE: 'ghcr.io/pamacea/daemon-tools:0.7.5',
+  LOCAL_IMAGE: 'daemon-tools',
+  get IMAGE() { return this.PREBUILT_IMAGE; },
   CONTAINER: 'daemon-tools',
   PROMPT_DEST: path.join(process.cwd(), '.daemon', 'EXECUTE.md'),
   DOCKERFILE: path.resolve(__dirname, '../../../bin/Dockerfile'),
+  DOCKERFILE_OPTIMIZED: path.resolve(__dirname, '../../../bin/Dockerfile.optimized'),
 };
 
 /**
@@ -94,28 +98,46 @@ export class InitCommand {
       }
       logger.success('  Docker is running');
 
-      // --- Step 2: Build image if missing ---
-      const imageExists = run(`docker images -q ${CONFIG.IMAGE}`);
+      // --- Step 2: Check for pre-built image or build locally ---
+      let imageToUse = CONFIG.LOCAL_IMAGE;
 
-      if (!imageExists) {
-        logger.info('');
-        logger.warn('  ◆ The testing toolkit needs to be installed (~500 MB Docker image).');
-        logger.info('  This only happens once.');
-        logger.info('');
-        logger.info('  → Building testing toolkit...');
-        logger.info('  This may take 2-3 minutes on first run...');
-        logger.info('');
+      // First, try to pull the pre-built image (faster!)
+      logger.info('  → Checking for pre-built toolkit image...');
+      const prebuiltExists = run(`docker images -q ${CONFIG.PREBUILT_IMAGE}`, { silent: true });
 
-        const buildCmd = `docker build -t ${CONFIG.IMAGE} -f "${CONFIG.DOCKERFILE}" "${path.dirname(CONFIG.DOCKERFILE)}"`;
-        try {
-          execSync(buildCmd, { stdio: 'inherit', timeout: 1800000 }); // 30 minutes
-        } catch {
-          throw new Error(`Failed to build toolkit. Try: ${buildCmd}`);
-        }
-
-        logger.success('  Testing toolkit installed');
+      if (prebuiltExists) {
+        logger.success('  Using pre-built image');
+        imageToUse = CONFIG.PREBUILT_IMAGE;
       } else {
-        logger.success('  Testing toolkit ready');
+        // Try to pull it
+        logger.info('  → Downloading pre-built image (this is faster than building)...');
+        try {
+          execSync(`docker pull ${CONFIG.PREBUILT_IMAGE}`, { stdio: 'inherit', timeout: 300000 });
+          logger.success('  Pre-built image downloaded');
+          imageToUse = CONFIG.PREBUILT_IMAGE;
+        } catch {
+          // Fall back to local build
+          logger.info('  → Pre-built image unavailable, building locally...');
+          logger.info('  This will take 5-10 minutes with optimizations...');
+
+          // Use optimized Dockerfile if available
+          const dockerfilePath = fs.existsSync(CONFIG.DOCKERFILE_OPTIMIZED)
+            ? CONFIG.DOCKERFILE_OPTIMIZED
+            : CONFIG.DOCKERFILE;
+
+          const buildCmd = `docker build -t ${CONFIG.LOCAL_IMAGE} -f "${dockerfilePath}" "${path.dirname(dockerfilePath)}"`;
+          try {
+            execSync(buildCmd, { stdio: 'inherit', timeout: 1800000 }); // 30 minutes max
+            logger.success('  Toolkit built locally');
+          } catch {
+            throw new Error(`Failed to build toolkit. Try: ${buildCmd}`);
+          }
+        }
+      }
+
+      // Tag the image as daemon-tools for consistency
+      if (imageToUse !== CONFIG.LOCAL_IMAGE) {
+        run(`docker tag ${imageToUse} ${CONFIG.LOCAL_IMAGE}`, { silent: true });
       }
 
       // --- Step 3: Start container if not running ---
@@ -142,7 +164,7 @@ export class InitCommand {
           const networkFlag = isLinux ? '--network=host' : '';
 
           process.stdout.write(`  → Creating toolkit container (${CONFIG.CONTAINER})...`);
-          const runCmd = `docker run -d --name ${CONFIG.CONTAINER} ${networkFlag} ${CONFIG.IMAGE}`.replace(/\s+/g, ' ');
+          const runCmd = `docker run -d --name ${CONFIG.CONTAINER} ${networkFlag} ${CONFIG.LOCAL_IMAGE}`.replace(/\s+/g, ' ');
           if (run(runCmd, { timeout: 30000 }) === null) {
             logger.error('');
             throw new Error(`Failed to create container. Try: ${runCmd}`);
