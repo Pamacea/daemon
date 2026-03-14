@@ -89,6 +89,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.1] - 2026-03-14
+
+### Fixed
+- Include docker-entrypoint.sh in published package files
+
 ## [0.6.1] - 2026-02-18
 
 ### Fixed
