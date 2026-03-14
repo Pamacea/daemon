@@ -1,9 +1,9 @@
-# Daemon - Testing Tools Container v0.7.0
+# Daemon - Testing Tools Container v0.7.2
 FROM node:20-slim
 
 LABEL maintainer="Yanis"
-LABEL description="Daemon v0.7.0 - Automated testing and quality tools for web applications"
-LABEL version="0.7.0"
+LABEL description="Daemon v0.7.2 - Automated testing and quality tools for web applications"
+LABEL version="0.7.2"
 
 # ============================================================================
 # ENVIRONMENT VARIABLES
@@ -57,7 +57,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Install Rust with rustup for Rust project testing and compilation
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
     rustup component add rustfmt clippy rust-analyzer && \
-    cargo install cargo-nextest && \
+    cargo install --locked cargo-nextest && \
     cargo install cargo-audit && \
     cargo install cargo-watch && \
     chmod -R a+w $RUSTUP_HOME $CARGO_HOME
