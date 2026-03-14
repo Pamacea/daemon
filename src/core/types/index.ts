@@ -113,3 +113,29 @@ export type {
   ProgressCallback,
   ProgressResult,
 } from './common.types.js';
+
+// Scoring types
+export type {
+  DimensionScore,
+  CodeDimension,
+  ProjectScore,
+  Issue,
+  Improvement,
+  ScoreTrend,
+  Recommendation,
+  ScoringOptions,
+  IssueSeverity,
+  IssueCategory,
+  ImprovementType,
+  Effort,
+  Impact,
+  Priority,
+  ScoreGrade,
+  TrendDirection,
+  HistoricalScore,
+  DimensionAnalyzerConfig,
+  ScoreComparison,
+  ScoreSummary,
+  ScoringError,
+  ScoringErrorType,
+} from './scoring.types.js';

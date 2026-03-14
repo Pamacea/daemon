@@ -27,6 +27,9 @@ export type Framework =
   | 'Hono'
   | 'Koa'
   | 'NestJS'
+  | 'Axum'
+  | 'Actix'
+  | 'Rocket'
   | 'Django'
   | 'Flask'
   | 'FastAPI'
@@ -36,12 +39,12 @@ export type Framework =
 /**
  * Supported programming languages
  */
-export type Language = 'TypeScript' | 'JavaScript' | 'Python' | 'Go' | 'Java' | 'TypeScript + JavaScript';
+export type Language = 'TypeScript' | 'JavaScript' | 'Python' | 'Go' | 'Java' | 'Rust' | 'TypeScript + JavaScript';
 
 /**
  * Supported test runners
  */
-export type TestRunner = 'Vitest' | 'Jest' | 'Mocha' | 'Jasmine' | 'Pytest';
+export type TestRunner = 'Vitest' | 'Jest' | 'Mocha' | 'Jasmine' | 'Pytest' | 'Cargo Test';
 
 /**
  * Database information

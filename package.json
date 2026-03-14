@@ -1,7 +1,7 @@
 {
   "name": "@oalacea/daemon",
-  "version": "0.6.4",
-  "description": "AI-powered automated test generation and remediation for web applications",
+  "version": "0.7.0",
+  "description": "AI-powered code quality analysis, scoring, and optimization for web applications",
   "author": "Yanis",
   "license": "MIT",
   "repository": {
@@ -32,7 +32,15 @@
     "performance",
     "vitest",
     "playwright",
-    "k6"
+    "k6",
+    "code-quality",
+    "scoring",
+    "seo",
+    "security",
+    "accessibility",
+    "optimization",
+    "rust",
+    "nestjs"
   ],
   "devDependencies": {
     "@types/node": "^20.19.33",

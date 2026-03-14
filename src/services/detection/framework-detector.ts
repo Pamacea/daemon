@@ -140,8 +140,41 @@ const BACKEND_FRAMEWORKS: FrameworkPattern[] = [
     name: 'NestJS',
     patterns: [
       { type: 'package-json', file: 'package.json', pattern: /"@nestjs\/core"\s*:/, scope: 'dependencies', priority: 10 },
+      { type: 'package-json', file: 'package.json', pattern: /"@nestjs\/common"\s*:/, scope: 'dependencies', priority: 8 },
+      { type: 'package-json', file: 'package.json', pattern: /"@nestjs\/testing"\s*:/, scope: 'devDependencies', priority: 6 },
+      { type: 'file-exists', file: 'nest-cli.json', shouldExist: true, priority: 8 },
     ],
     confidenceThreshold: 0.5,
+  },
+];
+
+/**
+ * Rust framework patterns
+ */
+const RUST_FRAMEWORKS: FrameworkPattern[] = [
+  {
+    name: 'Axum',
+    patterns: [
+      { type: 'file-exists', file: 'Cargo.toml', shouldExist: true, priority: 10 },
+      { type: 'content-match', file: 'Cargo.toml', pattern: /axum\s*=/, priority: 10 },
+    ],
+    confidenceThreshold: 0.6,
+  },
+  {
+    name: 'Actix',
+    patterns: [
+      { type: 'file-exists', file: 'Cargo.toml', shouldExist: true, priority: 10 },
+      { type: 'content-match', file: 'Cargo.toml', pattern: /actix-web\s*=/, priority: 10 },
+    ],
+    confidenceThreshold: 0.6,
+  },
+  {
+    name: 'Rocket',
+    patterns: [
+      { type: 'file-exists', file: 'Cargo.toml', shouldExist: true, priority: 10 },
+      { type: 'content-match', file: 'Cargo.toml', pattern: /rocket\s*=/, priority: 10 },
+    ],
+    confidenceThreshold: 0.6,
   },
 ];
 
@@ -207,6 +240,8 @@ export class FrameworkDetector {
     if (this.includeBackend) {
       basePatterns.push(...BACKEND_FRAMEWORKS);
     }
+    // Always include Rust frameworks
+    basePatterns.push(...RUST_FRAMEWORKS);
     if (customPatterns) {
       basePatterns.push(...customPatterns);
     }
@@ -556,6 +591,16 @@ export class FrameworkDetector {
    * Detect project language
    */
   private async detectLanguage(projectPath: string): Promise<DetectionResult<Language>> {
+    // Check for Rust first
+    const hasCargoToml = await this.fileExists(join(projectPath, 'Cargo.toml'));
+    if (hasCargoToml) {
+      return {
+        value: 'Rust',
+        confidence: 0.95,
+        evidence: ['Found Cargo.toml'],
+      };
+    }
+
     const pkg = await this.readPackageJson(projectPath);
 
     // Check for TypeScript
@@ -581,6 +626,16 @@ export class FrameworkDetector {
    * Detect test runner
    */
   private async detectTestRunner(projectPath: string): Promise<DetectionResult<TestRunner>> {
+    // Check for Rust projects
+    const hasCargoToml = await this.fileExists(join(projectPath, 'Cargo.toml'));
+    if (hasCargoToml) {
+      return {
+        value: 'Cargo Test',
+        confidence: 0.95,
+        evidence: ['Found Cargo.toml - using Rust built-in test framework'],
+      };
+    }
+
     const pkg = await this.readPackageJson(projectPath);
     const deps = { ...(pkg?.dependencies ?? {}), ...(pkg?.devDependencies ?? {}) };
 
@@ -608,7 +663,7 @@ export class FrameworkDetector {
       };
     }
 
-    // Default to vitest
+    // Default to vitest for Node.js projects
     return {
       value: 'Vitest',
       confidence: 0.3,
@@ -660,17 +715,18 @@ export class FrameworkDetector {
     let outsideSrc = 0;
 
     const testExtensions = ['.test.ts', '.test.tsx', '.test.js', '.test.jsx', '.spec.ts', '.spec.tsx', '.spec.js', '.spec.jsx'];
+    const rustTestExtensions = ['.rs']; // Rust test files
 
     try {
       const entries = await readdir(projectPath, { withFileTypes: true });
 
       for (const entry of entries) {
         if (entry.isDirectory() && entry.name === 'src') {
-          const srcTests = await this.countTestsInDir(join(projectPath, 'src'), testExtensions);
+          const srcTests = await this.countTestsInDir(join(projectPath, 'src'), [...testExtensions, ...rustTestExtensions]);
           inSrc = srcTests;
           total += srcTests;
         } else if (entry.isDirectory() && (entry.name === 'tests' || entry.name === 'test')) {
-          const testFiles = await this.countTestsInDir(join(projectPath, entry.name), testExtensions);
+          const testFiles = await this.countTestsInDir(join(projectPath, entry.name), [...testExtensions, ...rustTestExtensions]);
           outsideSrc += testFiles;
           total += testFiles;
         } else if (entry.isFile() && testExtensions.some((ext) => entry.name.endsWith(ext))) {
@@ -696,6 +752,7 @@ export class FrameworkDetector {
   private async countTestsInDir(dirPath: string, testExtensions: string[]): Promise<number> {
     const { readdir } = await import('node:fs/promises');
     const { join } = await import('node:path');
+    const { readFile } = await import('node:fs/promises');
 
     let count = 0;
 
@@ -706,11 +763,24 @@ export class FrameworkDetector {
         const fullPath = join(dirPath, entry.name);
 
         if (entry.isDirectory()) {
-          // Skip node_modules and other common directories
-          if (['node_modules', '.git', 'dist', 'build'].includes(entry.name)) {
+          // Skip node_modules, target, and other common directories
+          if (['node_modules', '.git', 'dist', 'build', 'target'].includes(entry.name)) {
             continue;
           }
           count += await this.countTestsInDir(fullPath, testExtensions);
+        } else if (entry.name.endsWith('.rs')) {
+          // For Rust files, check if they contain tests
+          try {
+            const content = await readFile(fullPath, 'utf-8');
+            if (content.includes('#[cfg(test)]') || content.includes('#[test]')) {
+              count++;
+            }
+          } catch {
+            // If we can't read the file, count it if it's in a tests directory
+            if (dirPath.endsWith('tests') || dirPath.includes('/tests/')) {
+              count++;
+            }
+          }
         } else if (testExtensions.some((ext) => entry.name.endsWith(ext))) {
           count++;
         }

@@ -13,6 +13,11 @@ build/
 coverage/
 .nyc_output/
 
+# Studio
+.smite/
+.ex-g-se/
+.claude/
+
 # Environment
 .env
 .env.local

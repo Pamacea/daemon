@@ -1,0 +1,72 @@
+[package]
+name = "my-project"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Web frameworks (uncomment the one you're using)
+# axum = "0.7"
+# actix-web = "4.9"
+# rocket = "0.5"
+
+# Async runtime
+tokio = { version = "1.40", features = ["full"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Database (uncomment as needed)
+# sqlx = { version = "0.8", features = ["runtime-tokio-rustls", "postgres", "sqlite", "mysql"] }
+# diesel = { version = "2.2", features = ["postgres", "sqlite"] }
+
+# HTTP client (if needed)
+# reqwest = { version = "0.12", features = ["json"] }
+
+# Environment variables
+# dotenv = "0.15"
+
+# Logging
+# tracing = "0.1"
+# tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Error handling
+# anyhow = "1.0"
+# thiserror = "1.0"
+
+[dev-dependencies]
+# Testing utilities
+tokio-test = "0.4"
+
+# HTTP testing for Axum
+# axum-test = "16.0"
+
+# HTTP testing for Actix
+# actix-rt = "2.10"
+
+# Database testing
+# sqlx-cli = "0.8"
+
+# Mocking
+# mockall = "0.13"
+
+[features]
+# Default features
+default = []
+
+# Test features
+test-utils = []
+
+[profile.dev]
+# Optimize dependencies in dev mode for faster compilation
+opt-level = 0
+
+[profile.release]
+# Optimize for size
+opt-level = "z"
+lto = true
+codegen-units = 1
+
+[profile.test]
+# Optimize tests for speed
+opt-level = 3

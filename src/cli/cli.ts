@@ -9,6 +9,11 @@ import { createLogger } from '../shared/utils/logger.js';
 import { InitCommand } from './commands/init.command.js';
 import { DetectCommand } from './commands/detect.command.js';
 import { TestCommand } from './commands/test.command.js';
+import { ScoreCommand } from './commands/score.command.js';
+import { ReviewCommand } from './commands/review.command.js';
+import { OptimizeCommand } from './commands/optimize.command.js';
+import { ReportCommand } from './commands/report.command.js';
+import { HistoryCommand } from './commands/history.command.js';
 
 const logger = createLogger('DaemonCli');
 
@@ -36,6 +41,11 @@ export class DaemonCli {
     this.commands.set('init', new InitCommand());
     this.commands.set('detect', new DetectCommand());
     this.commands.set('test', new TestCommand());
+    this.commands.set('score', new ScoreCommand());
+    this.commands.set('review', new ReviewCommand());
+    this.commands.set('optimize', new OptimizeCommand());
+    this.commands.set('report', new ReportCommand());
+    this.commands.set('history', new HistoryCommand());
   }
 
   /**
@@ -76,7 +86,7 @@ export class DaemonCli {
     }
 
     if (args[0] === '--version') {
-      console.log('v0.6.4');
+      console.log('v0.7.0');
       return;
     }
 
@@ -104,7 +114,7 @@ export class DaemonCli {
    */
   private showHelp(): void {
     console.log(`
-Daemon v0.6.4 - AI-powered automated testing toolkit
+Daemon v0.7.0 - AI-powered code quality toolkit
 
 USAGE:
   daemon <command> [options]
@@ -113,6 +123,11 @@ COMMANDS:
   init        Initialize project with Daemon (creates EXECUTE.md + Dockerfile.daemon)
   detect      Detect project framework and tools
   test        Generate and run tests
+  score       Show quality scores across dimensions (test, security, performance, etc.)
+  review      Perform comprehensive code review
+  optimize    Analyze and apply code optimizations
+  report      Generate quality reports (HTML, Markdown, JSON, JUnit)
+  history     View score history and trends
 
 OPTIONS:
   --help, -h  Show this help message
@@ -122,6 +137,11 @@ EXAMPLES:
   daemon init
   daemon detect
   daemon test --coverage
+  daemon score --dim all
+  daemon review --fix --auto
+  daemon optimize --perf --apply
+  daemon report --format=html --output=report.html
+  daemon history --limit=20 --compare
 
 GETTING STARTED:
   1. Run "daemon init" to initialize your project
