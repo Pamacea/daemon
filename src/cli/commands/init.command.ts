@@ -108,7 +108,7 @@ export class InitCommand {
 
         const buildCmd = `docker build -t ${CONFIG.IMAGE} -f "${CONFIG.DOCKERFILE}" "${path.dirname(CONFIG.DOCKERFILE)}"`;
         try {
-          execSync(buildCmd, { stdio: 'inherit', timeout: 600000 });
+          execSync(buildCmd, { stdio: 'inherit', timeout: 1800000 }); // 30 minutes
         } catch {
           throw new Error(`Failed to build toolkit. Try: ${buildCmd}`);
         }
