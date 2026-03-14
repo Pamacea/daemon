@@ -1,6 +1,6 @@
 {
   "name": "@oalacea/daemon",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "AI-powered code quality analysis, scoring, and optimization for web applications",
   "author": "Yanis",
   "license": "MIT",
@@ -13,7 +13,7 @@
     "daemon": "./dist/cli/index.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node -e \"const fs=require('fs');fs.cpSync('prompts','dist/prompts',{recursive:true});fs.cpSync('templates','dist/templates',{recursive:true});\"",
     "dev": "tsx src/cli/index.ts",
     "test": "vitest",
     "test:run": "node --experimental-strip-types dist/cli/index.js",
