@@ -10,12 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.7.5] - 2026-03-14
 
 ### Added
-- Pre-built Docker image support for instant initialization (1-2 min instead of 20+ min)
-- Auto-detection: tries pre-built image first, falls back to local build
-- Optimized Dockerfile with cargo-binstall for faster Rust tools installation
+- Optimized Dockerfile with cargo-binstall (5-7 min build instead of 20+ min)
+- Single npm install layer for better Docker caching
+- Chromium-only Playwright install (smaller image)
 
 ### Changed
-- Build timeout optimized for pre-built image scenario
+- Reduced Docker build time from 20+ minutes to 5-7 minutes
+- Removed pre-built image approach (simpler workflow)
 
 ## [0.7.4] - 2026-03-14
 
